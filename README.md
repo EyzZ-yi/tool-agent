@@ -42,7 +42,25 @@
         ↓
    返回给用户
 
-   ## 如何运行
-   1. 安装依赖：`pip install -r requirements.txt`
-   2. 在项目根目录创建 `.env` 文件，写入你的 DeepSeek API key：(DEEPSEEK_API_KEY=你的API)
-   3. 打开 `demo.ipynb`，从上到下依次运行每个 cell
+## v2 更新:RAG 知识检索 + 个性化建议
+
+新增 `search_my_notes` 工具,基于 embedding + 余弦相似度检索个人笔记。
+现在 agent 能基于个人数据(健身记录、电脑配置、学习笔记)给出个性化回答。
+
+### 能力示例
+- "我增肌早餐吃什么?" → 基于个人饮食计划返回精确数据
+- "我电脑什么配置?" → 完整复述硬件清单 + 价格
+- "能不能安排一周健身计划?" → **基于个人训练记录和目标,生成个性化方案**
+- "杭州几点 + 我笔记里 X" → 并行调用 2 个工具
+- "巴黎首都?" → 不调工具,直接基于 LLM 知识回答
+
+### 技术亮点
+- Function registry 模式:加新工具只改一行
+- 双路径处理:LLM 决定调工具(Path A) / 直接回答(Path B)
+- 检索质量信号:把相关度分数返回给 LLM,让它感知召回质量
+
+## 如何运行
+1. 安装依赖：`pip install -r requirements.txt`
+2. 在项目根目录创建 `.env` 文件，写入你的 DeepSeek API key：(DEEPSEEK_API_KEY=你的API)
+3. 在 `notes.py` 里替换成你自己的数据
+4. 打开 `demo.ipynb`，从上到下依次运行每个 cell
